@@ -107,49 +107,8 @@ jobs:
           ITCH_USER: ${{ env.ITCH_USER }}
           PACKAGE: build/linux
 
-  export-web:
-    name: Web Export
-    runs-on: ubuntu-latest
-    container:
-      image: barichello/godot-ci:mono-4.3
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        run: |
-          apt-get update && apt-get install -y wget
-          wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
-          chmod +x dotnet-install.sh
-          ./dotnet-install.sh --channel 8.0
-          echo "$HOME/.dotnet" >> $GITHUB_PATH
-
-      - name: Setup Godot
-        run: |
-          mkdir -v -p ~/.local/share/godot/export_templates/
-          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
-
-      - name: Build .NET solution
-        run: |
-          $HOME/.dotnet/dotnet restore
-          $HOME/.dotnet/dotnet build
-
-      - name: Web Build
-        run: |
-          mkdir -v -p build/web
-          godot --headless --verbose --export-release "Web" build/web/index.html
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: web
-          path: build/web
-
-      - name: Deploy to itch.io
-        uses: yeslayla/butler-publish-itchio-action@master
-        env:
-          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_API_KEY }}
-          CHANNEL: web
-          ITCH_GAME: ${{ env.ITCH_GAME }}
-          ITCH_USER: ${{ env.ITCH_USER }}
-          PACKAGE: build/web
+  # Web export disabled - C#/.NET web export in Godot 4.3 is experimental
+  # and requires additional setup. Enable when Godot C# web support matures.
+  # export-web:
+  #   name: Web Export
+  #   ...
