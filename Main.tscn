@@ -1,0 +1,92 @@
+[gd_scene load_steps=14 format=3 uid="uid://b1abc123main"]
+
+[ext_resource type="Script" path="res://Scripts/Owner.cs" id="1_owner"]
+[ext_resource type="Script" path="res://Scripts/Dog.cs" id="2_dog"]
+[ext_resource type="Script" path="res://Scripts/Leash.cs" id="3_leash"]
+[ext_resource type="Script" path="res://Scripts/TensionWarningUI.cs" id="4_ui"]
+[ext_resource type="Script" path="res://Scripts/CameraController.cs" id="5_camera"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_owner"]
+height = 2.0
+radius = 0.5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_owner"]
+height = 2.0
+top_radius = 0.5
+bottom_radius = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_owner"]
+albedo_color = Color(0.2, 0.4, 0.8, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_dog"]
+radius = 0.4
+
+[sub_resource type="SphereMesh" id="SphereMesh_dog"]
+radius = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dog"]
+albedo_color = Color(0.8, 0.5, 0.2, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
+size = Vector3(50, 0.1, 50)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ground"]
+size = Vector2(50, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ground"]
+albedo_color = Color(0.3, 0.6, 0.3, 1)
+
+[node name="Main" type="Node3D"]
+
+[node name="Owner" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("1_owner")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Owner"]
+shape = SubResource("CylinderShape3D_owner")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Owner"]
+mesh = SubResource("CylinderMesh_owner")
+surface_material_override/0 = SubResource("StandardMaterial3D_owner")
+
+[node name="Dog" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 2)
+script = ExtResource("2_dog")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Dog"]
+shape = SubResource("SphereShape3D_dog")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Dog"]
+mesh = SubResource("SphereMesh_dog")
+surface_material_override/0 = SubResource("StandardMaterial3D_dog")
+
+[node name="Leash" type="Node3D" parent="."]
+script = ExtResource("3_leash")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.866, 0.5, 0, -0.5, 0.866, 0, 8, 10)
+script = ExtResource("5_camera")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.25, 0.433, 0, 0.866, 0.5, -0.5, -0.433, 0.75, 0, 10, 0)
+shadow_enabled = true
+
+[node name="Ground" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_ground")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("PlaneMesh_ground")
+surface_material_override/0 = SubResource("StandardMaterial3D_ground")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="TensionWarning" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_ui")
