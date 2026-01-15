@@ -22,15 +22,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup
+      - name: Setup .NET
+        run: |
+          apt-get update && apt-get install -y wget
+          wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
+          chmod +x dotnet-install.sh
+          ./dotnet-install.sh --channel 8.0
+          echo "$HOME/.dotnet" >> $GITHUB_PATH
+
+      - name: Setup Godot
         run: |
           mkdir -v -p ~/.local/share/godot/export_templates/
           mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
 
       - name: Build .NET solution
         run: |
-          dotnet restore
-          dotnet build
+          $HOME/.dotnet/dotnet restore
+          $HOME/.dotnet/dotnet build
 
       - name: Windows Build
         run: |
@@ -61,15 +69,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup
+      - name: Setup .NET
+        run: |
+          apt-get update && apt-get install -y wget
+          wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
+          chmod +x dotnet-install.sh
+          ./dotnet-install.sh --channel 8.0
+          echo "$HOME/.dotnet" >> $GITHUB_PATH
+
+      - name: Setup Godot
         run: |
           mkdir -v -p ~/.local/share/godot/export_templates/
           mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
 
       - name: Build .NET solution
         run: |
-          dotnet restore
-          dotnet build
+          $HOME/.dotnet/dotnet restore
+          $HOME/.dotnet/dotnet build
 
       - name: Linux Build
         run: |
@@ -100,15 +116,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup
+      - name: Setup .NET
+        run: |
+          apt-get update && apt-get install -y wget
+          wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
+          chmod +x dotnet-install.sh
+          ./dotnet-install.sh --channel 8.0
+          echo "$HOME/.dotnet" >> $GITHUB_PATH
+
+      - name: Setup Godot
         run: |
           mkdir -v -p ~/.local/share/godot/export_templates/
           mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
 
       - name: Build .NET solution
         run: |
-          dotnet restore
-          dotnet build
+          $HOME/.dotnet/dotnet restore
+          $HOME/.dotnet/dotnet build
 
       - name: Web Build
         run: |
