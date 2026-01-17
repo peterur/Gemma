@@ -27,3 +27,8 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# Build artifacts
+build/
+*.uid
+*.old
