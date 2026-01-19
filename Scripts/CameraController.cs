@@ -1,4 +1,5 @@
 using Godot;
+using System;
 
 public partial class CameraController : Camera3D
 {
@@ -14,13 +15,35 @@ public partial class CameraController : Camera3D
     // Home position - behind the shoulder view of the whole map
     private readonly Vector3 _homePosition = new Vector3(0, 12, 18);
     private readonly Vector3 _homeRotation = new Vector3(Mathf.DegToRad(-35f), 0, 0);
+    private const string LogContext = "Camera";
 
     public override void _Ready()
     {
-        GoHome();
+        try
+        {
+            Logger.Debug("Camera initializing...", LogContext);
+            GoHome();
+            Logger.Info("Camera initialized successfully", LogContext);
+        }
+        catch (Exception ex)
+        {
+            Logger.Exception(ex, LogContext);
+        }
     }
 
     public override void _Process(double delta)
+    {
+        try
+        {
+            ProcessCamera(delta);
+        }
+        catch (Exception ex)
+        {
+            Logger.Exception(ex, LogContext);
+        }
+    }
+
+    private void ProcessCamera(double delta)
     {
         float dt = (float)delta;
 

@@ -1,10 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://b1abc123main"]
+[gd_scene load_steps=15 format=3 uid="uid://b1abc123main"]
 
 [ext_resource type="Script" path="res://Scripts/Owner.cs" id="1_owner"]
 [ext_resource type="Script" path="res://Scripts/Dog.cs" id="2_dog"]
 [ext_resource type="Script" path="res://Scripts/Leash.cs" id="3_leash"]
 [ext_resource type="Script" path="res://Scripts/TensionWarningUI.cs" id="4_ui"]
 [ext_resource type="Script" path="res://Scripts/CameraController.cs" id="5_camera"]
+[ext_resource type="Script" path="res://Scripts/GameManager.cs" id="6_gamemanager"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_owner"]
 height = 2.0
@@ -37,6 +38,9 @@ size = Vector2(50, 50)
 albedo_color = Color(0.3, 0.6, 0.3, 1)
 
 [node name="Main" type="Node3D"]
+
+[node name="GameManager" type="Node" parent="."]
+script = ExtResource("6_gamemanager")
 
 [node name="Owner" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

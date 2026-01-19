@@ -1,4 +1,5 @@
 using Godot;
+using System;
 
 public partial class Leash : Node3D
 {
@@ -26,28 +27,65 @@ public partial class Leash : Node3D
     private MeshInstance3D _leashVisual;
     private StandardMaterial3D _leashMaterial;
     private bool _wasTense = false;
+    private const string LogContext = "Leash";
 
     public bool IsTense { get; private set; } = false;
     public float TensionAmount { get; private set; } = 0f;
 
     public override void _Ready()
     {
-        _owner = GetNode<CharacterBody3D>(OwnerPath);
-        _dog = GetNode<CharacterBody3D>(DogPath);
+        try
+        {
+            Logger.Debug("Leash initializing...", LogContext);
 
-        _leashMesh = new ImmediateMesh();
-        _leashMaterial = new StandardMaterial3D();
-        _leashMaterial.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
-        _leashMaterial.AlbedoColor = new Color(0.4f, 0.2f, 0.1f);
-        _leashMaterial.CullMode = BaseMaterial3D.CullModeEnum.Disabled;
+            _owner = GetNodeOrNull<CharacterBody3D>(OwnerPath);
+            _dog = GetNodeOrNull<CharacterBody3D>(DogPath);
 
-        _leashVisual = new MeshInstance3D();
-        _leashVisual.Mesh = _leashMesh;
-        _leashVisual.MaterialOverride = _leashMaterial;
-        AddChild(_leashVisual);
+            if (_owner == null)
+            {
+                Logger.Error($"Owner not found at path '{OwnerPath}'", LogContext);
+            }
+
+            if (_dog == null)
+            {
+                Logger.Error($"Dog not found at path '{DogPath}'", LogContext);
+            }
+
+            _leashMesh = new ImmediateMesh();
+            _leashMaterial = new StandardMaterial3D();
+            _leashMaterial.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
+            _leashMaterial.AlbedoColor = new Color(0.4f, 0.2f, 0.1f);
+            _leashMaterial.CullMode = BaseMaterial3D.CullModeEnum.Disabled;
+
+            _leashVisual = new MeshInstance3D();
+            _leashVisual.Mesh = _leashMesh;
+            _leashVisual.MaterialOverride = _leashMaterial;
+            AddChild(_leashVisual);
+
+            Logger.Info("Leash initialized successfully", LogContext);
+        }
+        catch (Exception ex)
+        {
+            Logger.Exception(ex, LogContext);
+        }
     }
 
     public override void _PhysicsProcess(double delta)
+    {
+        try
+        {
+            if (_owner == null || _dog == null)
+                return;
+
+            ProcessLeash(delta);
+        }
+        catch (Exception ex)
+        {
+            Logger.Exception(ex, LogContext);
+        }
+    }
+
+    private void ProcessLeash(double delta)
     {
         if (_owner == null || _dog == null)
             return;

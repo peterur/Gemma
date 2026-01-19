@@ -4,4 +4,7 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>Gemma</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Gemma.Tests/**/*.cs" />
+  </ItemGroup>
 </Project>
